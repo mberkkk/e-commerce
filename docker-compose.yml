@@ -1,0 +1,232 @@
+services:
+  # PostgreSQL Database - Order Service
+  order-db:
+    image: postgres:15-alpine
+    container_name: order-db
+    restart: always
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: orderuser
+      POSTGRES_PASSWORD: orderpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - order_data:/var/lib/postgresql/data
+
+  # PostgreSQL Database - Product Service
+  product-db:
+    image: postgres:15-alpine
+    container_name: product-db
+    restart: always
+    environment:
+      POSTGRES_DB: product
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5433:5432"
+    volumes:
+      - product_data:/var/lib/postgresql/data
+
+  # PostgreSQL Database - Cart Service
+  cart-db:
+    image: postgres:15-alpine
+    container_name: cart-db
+    restart: always
+    environment:
+      POSTGRES_DB: cart
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5434:5432"
+    volumes:
+      - cart_data:/var/lib/postgresql/data
+
+  # PostgreSQL Database - User Service
+  user-db:
+    image: postgres:15-alpine
+    container_name: user-db
+    restart: always
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: useruser
+      POSTGRES_PASSWORD: userpassword
+    ports:
+      - "5435:5432"
+    volumes:
+      - user_data:/var/lib/postgresql/data
+
+  # PostgreSQL Database - Notification Service
+  notification-db:
+    image: postgres:15-alpine
+    container_name: notification-db
+    restart: always
+    environment:
+      POSTGRES_DB: notification
+      POSTGRES_USER: notificationuser
+      POSTGRES_PASSWORD: notificationpassword
+    ports:
+      - "5436:5432"
+    volumes:
+      - notification_data:/var/lib/postgresql/data
+
+  # Zookeeper - Simple
+  zookeeper:
+    image: zookeeper:3.8
+    container_name: zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+
+  # Kafka - Wurstmeister (No permission issues on Windows)
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://kafka:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9093,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_NUM_PARTITIONS: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+    # No volume needed - stored in container temporarily
+
+  # User Service Application
+  user-service-app:
+    build:
+      context: ./User_microservice/MicroservicesProject/UserMicroServiceProject/UserMicroServiceProject
+      dockerfile: Dockerfile
+    container_name: user-service-app
+    restart: always
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=
+      - SPRING_CLOUD_DISCOVERY_ENABLED=false
+      - SERVER_PORT=8083
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/userdb
+      - SPRING_DATASOURCE_USERNAME=useruser
+      - SPRING_DATASOURCE_PASSWORD=userpassword
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SERVICES_ORDER_BASE_URL=http://order-service-app:8081
+      - SERVICES_PRODUCT_BASE_URL=http://product-service-app:8080
+      - SERVICES_CART_BASE_URL=http://cart-service-app:8082
+    depends_on:
+      - user-db
+      - kafka
+
+  # Order Service Application
+  order-service-app:
+    build:
+      context: ./order-service/order-service
+      dockerfile: Dockerfile
+    container_name: order-service-app
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_CLOUD_DISCOVERY_ENABLED=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://order-db:5432/orderdb
+      - SPRING_DATASOURCE_USERNAME=orderuser
+      - SPRING_DATASOURCE_PASSWORD=orderpassword
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - SERVICES_PRODUCT_BASE_URL=http://product-service-app:8080
+      - SERVICES_CART_BASE_URL=http://cart-service-app:8082
+      - SERVICES_USER_BASE_URL=http://user-service-app:8083
+    depends_on:
+      - order-db
+      - kafka
+      - cart-service-app
+      - user-service-app
+      - product-service-app
+
+  # Product Service Application
+  product-service-app:
+    build:
+      context: ./Product-Micro-Service-main/Product-Micro-Service-main
+      dockerfile: Dockerfile
+    container_name: product-service-app
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_CLOUD_DISCOVERY_ENABLED=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://product-db:5432/product
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SERVICES_CART_BASE_URL=http://cart-service-app:8082
+      - SERVICES_USER_BASE_URL=http://user-service-app:8083
+    depends_on:
+      - product-db
+      - kafka
+      - cart-service-app
+      - user-service-app
+
+  # Cart Service Application
+  cart-service-app:
+    build:
+      context: ./cart-repository-master/cart-repository-master
+      dockerfile: Dockerfile
+    container_name: cart-service-app
+    restart: always
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_CLOUD_DISCOVERY_ENABLED=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cart-db:5432/cart
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SERVICES_ORDER_BASE_URL=http://order-service-app:8081
+      - SERVICES_PRODUCT_BASE_URL=http://product-service-app:8080
+      - SERVICES_USER_BASE_URL=http://user-service-app:8083
+    depends_on:
+      - cart-db
+      - kafka
+
+  # Notification Service Application
+  notification-service-app:
+    build:
+      context: ./Notification
+      dockerfile: Dockerfile
+    container_name: notification-service-app
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-db:5432/notification
+      - SPRING_DATASOURCE_USERNAME=notificationuser
+      - SPRING_DATASOURCE_PASSWORD=notificationpassword
+    depends_on:
+      - kafka
+      - notification-db
+
+volumes:
+  order_data:
+  product_data:
+  cart_data:
+  user_data:
+  notification_data:

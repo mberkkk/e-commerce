@@ -1,0 +1,21 @@
+id,name,description,price,stockQuantity,imageUrl,popularityScore,categoryCode,isActive,createdAt,updatedAt
+1,MacBook Pro 14,High-end Apple laptop,2499.99,15,macbook.jpg,87,1001,true,2024-01-01T10:00:00,2024-01-01T10:00:00
+2,iPhone 15 Pro,Apple smartphone,1199.99,40,iphone.jpg,90,1002,true,2024-01-02T10:00:00,2024-01-02T10:00:00
+3,USB-C Cable,Fast charging cable,9.99,300,cable.jpg,70,1003,true,2024-01-03T10:00:00,2024-01-03T10:00:00
+4,Canon EOS R,Professional mirrorless camera,1899.50,10,canon.jpg,85,1004,true,2024-01-04T10:00:00,2024-01-04T10:00:00
+5,Galaxy Tab S9,Android tablet,799.00,25,tab.jpg,65,1005,true,2024-01-05T10:00:00,2024-01-05T10:00:00
+6,Dell XPS 13,Compact laptop,999.00,20,dell.jpg,75,1006,true,2024-01-06T10:00:00,2024-01-06T10:00:00
+7,Galaxy S23,Android flagship phone,999.00,50,s23.jpg,88,1007,true,2024-01-07T10:00:00,2024-01-07T10:00:00
+8,Sony Alpha A7,Mirrorless camera,1299.00,7,sony.jpg,82,1008,true,2024-01-08T10:00:00,2024-01-08T10:00:00
+9,Wireless Mouse,Ergonomic mouse,29.99,100,mouse.jpg,72,1009,true,2024-01-09T10:00:00,2024-01-09T10:00:00
+10,iPad Air 5,Apple tablet,649.00,18,ipadair.jpg,80,1010,true,2024-01-10T10:00:00,2024-01-10T10:00:00
+11,ThinkPad X1,Lenovo business laptop,1299.00,12,thinkpad.jpg,78,1011,true,2024-01-11T10:00:00,2024-01-11T10:00:00
+12,Pixel 8 Pro,Google flagship phone,1099.00,30,pixel.jpg,85,1012,true,2024-01-12T10:00:00,2024-01-12T10:00:00
+13,Phone Case,Silicone case for phones,15.99,200,case.jpg,60,1013,true,2024-01-13T10:00:00,2024-01-13T10:00:00
+14,Nikon Z6 II,Mid-range camera,1599.00,8,nikon.jpg,77,1014,true,2024-01-14T10:00:00,2024-01-14T10:00:00
+15,Surface Pro 9,Microsoft tablet-laptop,1399.00,14,surface.jpg,84,1015,true,2024-01-15T10:00:00,2024-01-15T10:00:00
+16,Acer Aspire,Affordable laptop,499.00,25,acer.jpg,58,1016,true,2024-01-16T10:00:00,2024-01-16T10:00:00
+17,OnePlus 11,Flagship phone,699.00,45,oneplus.jpg,79,1017,true,2024-01-17T10:00:00,2024-01-17T10:00:00
+18,Tripod Stand,Camera tripod,39.99,60,tripod.jpg,68,1018,true,2024-01-18T10:00:00,2024-01-18T10:00:00
+19,Power Bank,10000mAh portable charger,25.99,150,powerbank.jpg,73,1019,true,2024-01-19T10:00:00,2024-01-19T10:00:00
+20,Xiaomi Pad 6,Budget Android tablet,399.00,28,xiaomi.jpg,76,1020,true,2024-01-20T10:00:00,2024-01-20T10:00:00
