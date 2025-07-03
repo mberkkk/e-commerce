@@ -30,13 +30,6 @@ public class KafkaConfig {
     }
 
     // Topics for User Service to consume
-    @Bean
-    public NewTopic orderCreatedTopic() {
-        return TopicBuilder.name("ORDER_CREATED")
-                .partitions(3)
-                .replicas(1)
-                .build();
-    }
 
     @Bean
     public NewTopic productPriceChangedTopic() {

@@ -16,12 +16,12 @@ public class CartEventListener {
 
     private final CartService cartService;
 
-    @KafkaListener(topics = "order-created", groupId = "cart-service-group")
-    public void handleOrderCreated(String eventJson) {
-        log.info("Received order-created event JSON: {}", eventJson);
+    @KafkaListener(topics = "ORDER_CREATED", groupId = "cart-service-group")
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        log.info("Received order-created event JSON: {}", event);
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            OrderCreatedEvent event = mapper.readValue(eventJson, OrderCreatedEvent.class);
+            //ObjectMapper mapper = new ObjectMapper();
+            //OrderCreatedEvent event = mapper.readValue(eventJson, OrderCreatedEvent.class);
             // Artık kendi OrderCreatedEvent class'ınızı kullanabilirsiniz
             cartService.clearCart(event.getUserId());
             log.info("Cart cleared for user: {}", event.getUserId());
