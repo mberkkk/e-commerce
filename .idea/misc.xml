@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Notification/pom.xml" />
+        <option value="$PROJECT_DIR$/User_microservice/MicroservicesProject/UserMicroServiceProject/UserMicroServiceProject/pom.xml" />
+        <option value="$PROJECT_DIR$/cart-repository-master/cart-repository-master/pom.xml" />
+        <option value="$PROJECT_DIR$/Product-Micro-Service-main/Product-Micro-Service-main/pom.xml" />
+        <option value="$PROJECT_DIR$/order-service/order-service/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-21" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
+</project>

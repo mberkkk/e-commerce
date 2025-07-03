@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.ben-manes.caffeine:caffeine:3.1.8">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/ben-manes/caffeine/caffeine/3.1.8/caffeine-3.1.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
