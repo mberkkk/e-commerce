@@ -1,4 +1,4 @@
-package org.example.notification.config;
+package com.microservices.product_service.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/notifications/**",
+                                "/api/products/**",
+                                "/api/categories/**",
                                 "/api/internal/**",
                                 "/api-docs/**",
                                 "/swagger-ui/**",
