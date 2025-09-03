@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.42.50.v20250628-1110, environment: Java 21.0.7 (Eclipse Adoptium)"
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class StockReservationMapperImpl implements StockReservationMapper {
@@ -22,11 +22,11 @@ public class StockReservationMapperImpl implements StockReservationMapper {
 
         StockReservation.StockReservationBuilder stockReservation = StockReservation.builder();
 
-        stockReservation.confirmed( productDTO.getConfirmed() );
         stockReservation.id( productDTO.getId() );
-        stockReservation.orderReference( productDTO.getOrderReference() );
         stockReservation.product( productDTO.getProduct() );
         stockReservation.reservedQuantity( productDTO.getReservedQuantity() );
+        stockReservation.orderReference( productDTO.getOrderReference() );
+        stockReservation.confirmed( productDTO.getConfirmed() );
 
         return stockReservation.build();
     }
@@ -39,11 +39,11 @@ public class StockReservationMapperImpl implements StockReservationMapper {
 
         StockReservationDTO stockReservationDTO = new StockReservationDTO();
 
-        stockReservationDTO.setConfirmed( stockReservation.getConfirmed() );
         stockReservationDTO.setId( stockReservation.getId() );
-        stockReservationDTO.setOrderReference( stockReservation.getOrderReference() );
         stockReservationDTO.setProduct( stockReservation.getProduct() );
         stockReservationDTO.setReservedQuantity( stockReservation.getReservedQuantity() );
+        stockReservationDTO.setOrderReference( stockReservation.getOrderReference() );
+        stockReservationDTO.setConfirmed( stockReservation.getConfirmed() );
 
         return stockReservationDTO;
     }

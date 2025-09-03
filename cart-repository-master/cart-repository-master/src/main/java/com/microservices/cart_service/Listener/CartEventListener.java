@@ -1,11 +1,10 @@
 package com.microservices.cart_service.Listener;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.cart_service.Event.OrderCreatedEvent;
+import com.microservices.cart_service.Event.UserRegisteredEvent;
 import com.microservices.cart_service.Service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -31,17 +30,13 @@ public class CartEventListener {
     }
 
     @KafkaListener(topics = "user-registered", groupId = "cart-service-group")
-    public void handleUserRegistered(ConsumerRecord<String, String> record) {
+    public void handleUserRegistered(UserRegisteredEvent event) {
         try {
-            String value = record.value();
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            com.fasterxml.jackson.databind.JsonNode node = mapper.readTree(value);
-            String userId = node.get("userId").asText();
-            if (userId != null) {
-                cartService.createCart(userId);
-                log.info("Cart created for new user: {}", userId);
+            if (event.getUserId() != null) {
+                cartService.createCart(event.getUserId());
+                log.info("Cart created for new user: {}", event.getUserId());
             } else {
-                log.warn("user-registered event'te userId bulunamadı: {}", value);
+                log.warn("user-registered event'te userId bulunamadı: {}", event);
             }
         } catch (Exception e) {
             log.error("Error creating cart for new user from user-registered event", e);

@@ -1,8 +1,8 @@
-package com.example.UserMicroServiceProject.infrastructure.event;
+package com.example.UserMicroServiceProject.infrastructure.messaging;
 
-import com.example.UserMicroServiceProject.infrastructure.client.OrderServiceClient;
-import com.example.UserMicroServiceProject.infrastructure.client.ProductServiceClient;
-import com.example.UserMicroServiceProject.infrastructure.client.CartServiceClient;
+import com.example.UserMicroServiceProject.infrastructure.external.CartServiceClient;
+import com.example.UserMicroServiceProject.infrastructure.external.OrderServiceClient;
+import com.example.UserMicroServiceProject.infrastructure.external.ProductServiceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

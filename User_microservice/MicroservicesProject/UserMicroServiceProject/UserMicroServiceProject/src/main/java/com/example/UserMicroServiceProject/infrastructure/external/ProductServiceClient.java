@@ -1,4 +1,4 @@
-package com.example.UserMicroServiceProject.infrastructure.client;
+package com.example.UserMicroServiceProject.infrastructure.external;
 
 import com.example.UserMicroServiceProject.infrastructure.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -1,4 +1,4 @@
-package com.example.UserMicroServiceProject.infrastructure.client;
+package com.example.UserMicroServiceProject.infrastructure.external;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.example.UserMicroServiceProject.infrastructure.event;
+package com.example.UserMicroServiceProject.infrastructure.messaging;
 
 import com.example.UserMicroServiceProject.application.port.output.EventPublisherPort;
 import com.example.UserMicroServiceProject.domain.event.*;
