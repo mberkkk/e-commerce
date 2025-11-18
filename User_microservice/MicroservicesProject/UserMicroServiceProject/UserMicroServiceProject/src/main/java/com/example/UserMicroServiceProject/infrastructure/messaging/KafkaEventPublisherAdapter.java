@@ -1,6 +1,6 @@
 package com.example.UserMicroServiceProject.infrastructure.messaging;
 
-import com.example.UserMicroServiceProject.application.port.output.EventPublisherPort;
+import com.example.UserMicroServiceProject.application.port.input.EventPublisherPort;
 import com.example.UserMicroServiceProject.domain.event.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

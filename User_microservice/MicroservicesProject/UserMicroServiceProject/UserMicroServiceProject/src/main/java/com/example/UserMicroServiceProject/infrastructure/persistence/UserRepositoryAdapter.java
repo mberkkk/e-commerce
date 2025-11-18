@@ -1,6 +1,6 @@
 package com.example.UserMicroServiceProject.infrastructure.persistence;
 
-import com.example.UserMicroServiceProject.application.port.output.UserRepositoryPort;
+import com.example.UserMicroServiceProject.application.port.input.UserRepositoryPort;
 import com.example.UserMicroServiceProject.domain.model.user.User;
 import com.example.UserMicroServiceProject.domain.model.valueobject.Email;
 import com.example.UserMicroServiceProject.domain.model.valueobject.UserId;

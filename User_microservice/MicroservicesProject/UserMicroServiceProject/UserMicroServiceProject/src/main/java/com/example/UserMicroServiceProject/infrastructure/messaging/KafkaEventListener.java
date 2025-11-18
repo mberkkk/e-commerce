@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 public class KafkaEventListener {
 
     private final OrderServiceClient orderServiceClient;
-    private final ProductServiceClient productServiceClient;
     private final CartServiceClient cartServiceClient;
+    private final ProductServiceClient productServiceClient;
 
     @KafkaListener(topics = "ORDER_CREATED", groupId = "${spring.kafka.consumer.group-id}")
     public void handleOrderCreated(String orderId) {

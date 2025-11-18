@@ -1,8 +1,8 @@
 package com.example.UserMicroServiceProject.application.service;
 
 import com.example.UserMicroServiceProject.application.port.input.UserServicePort;
-import com.example.UserMicroServiceProject.application.port.output.EventPublisherPort;
-import com.example.UserMicroServiceProject.application.port.output.UserRepositoryPort;
+import com.example.UserMicroServiceProject.application.port.input.EventPublisherPort;
+import com.example.UserMicroServiceProject.application.port.input.UserRepositoryPort;
 import com.example.UserMicroServiceProject.application.usecase.command.ActivateUserCommand;
 import com.example.UserMicroServiceProject.application.usecase.command.ChangePasswordCommand;
 import com.example.UserMicroServiceProject.application.usecase.command.DeactivateUserCommand;

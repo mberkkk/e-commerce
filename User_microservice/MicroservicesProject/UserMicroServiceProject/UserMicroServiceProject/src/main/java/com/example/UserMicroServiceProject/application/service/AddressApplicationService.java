@@ -1,8 +1,8 @@
 package com.example.UserMicroServiceProject.application.service;
 
 import com.example.UserMicroServiceProject.application.port.input.AddressServicePort;
-import com.example.UserMicroServiceProject.application.port.output.EventPublisherPort;
-import com.example.UserMicroServiceProject.application.port.output.UserRepositoryPort;
+import com.example.UserMicroServiceProject.application.port.input.EventPublisherPort;
+import com.example.UserMicroServiceProject.application.port.input.UserRepositoryPort;
 import com.example.UserMicroServiceProject.application.usecase.command.AddAddressCommand;
 import com.example.UserMicroServiceProject.application.usecase.command.RemoveAddressCommand;
 import com.example.UserMicroServiceProject.application.usecase.command.SetDefaultAddressCommand;

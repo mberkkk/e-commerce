@@ -1,4 +1,4 @@
-package com.example.UserMicroServiceProject.application.port.output;
+package com.example.UserMicroServiceProject.application.port.input;
 
 import com.example.UserMicroServiceProject.domain.model.user.User;
 import com.example.UserMicroServiceProject.domain.model.valueobject.Email;

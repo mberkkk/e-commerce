@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
@@ -14,6 +14,8 @@ RUN ./mvnw dependency:go-offline -B
 
 # Source code'u kopyala
 COPY src ./src
+
+COPY target/*.jar app.jar
 
 # Uygulamayı build et
 RUN ./mvnw clean package -DskipTests

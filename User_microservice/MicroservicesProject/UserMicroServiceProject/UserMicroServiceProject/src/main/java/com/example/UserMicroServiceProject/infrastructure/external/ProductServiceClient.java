@@ -1,16 +1,13 @@
 package com.example.UserMicroServiceProject.infrastructure.external;
 
-import com.example.UserMicroServiceProject.infrastructure.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(
-        name = "product-service",
+@FeignClient(name = "product-service",
         url = "${external-services.product-service.url}",
-        path = "/api/products",
-        configuration = FeignConfig.class
-)public interface ProductServiceClient {
+        path = "/api/products")
+public interface ProductServiceClient {
 
     @GetMapping("/{productId}")
     ProductDTO getProduct(@PathVariable("productId") String productId);

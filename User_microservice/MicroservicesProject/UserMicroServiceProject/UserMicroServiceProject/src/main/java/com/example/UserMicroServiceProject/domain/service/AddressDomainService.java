@@ -149,7 +149,7 @@ public class AddressDomainService {
     }
 
     private boolean isSimilarAddress(Address existing, Address newAddress) {
-        // Simple similarity check - in real implementation, use fuzzy matching
+        // Simple similarity check
         String existingNormalized = normalizeAddressForComparison(existing);
         String newNormalized = normalizeAddressForComparison(newAddress);
 
@@ -158,6 +158,7 @@ public class AddressDomainService {
         return similarity > 0.8;
     }
 
+    //ToDo: Add comment about what method does
     private String normalizeAddressForComparison(Address address) {
         return (address.getFullAddress() + " " + address.getCity() + " " + address.getDistrict())
                 .toLowerCase()
@@ -175,6 +176,7 @@ public class AddressDomainService {
         return 1.0 - (double) editDistance / maxLength;
     }
 
+    // ToDo: Edit the method, add comment and make readible
     private int calculateEditDistance(String s1, String s2) {
         // Simplified edit distance calculation
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];
