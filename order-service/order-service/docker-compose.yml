@@ -1,0 +1,94 @@
+version: '3.8' # Docker Compose dosya formatının versiyonu (bu satır için uyarı alabilirsiniz, önemli değil)
+
+services:
+  # PostgreSQL Veritabanı Servisi (Mevcut)
+  order-db:
+    image: postgres:15-alpine # Kullanılacak PostgreSQL imajı
+    container_name: order-db
+    restart: always
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: orderuser
+      POSTGRES_PASSWORD: orderpassword
+    ports:
+      - "5432:5432" # Host portu:Container portu
+    volumes:
+      - order_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orderuser -d orderdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Kafka için Zookeeper servisi
+  zookeeper:
+    image: 'confluentinc/cp-zookeeper:7.4.0' # Confluent'in güvenilir Zookeeper imajı
+    container_name: zookeeper
+    restart: always
+    ports:
+      - "2181:2181" # Standart Zookeeper portu (host'a mapleniyor)
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck: # Zookeeper'ın sağlıklı olup olmadığını kontrol et
+      test: ["CMD-SHELL", "echo stat | nc localhost 2181"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Kafka broker servisi
+  kafka:
+    image: 'confluentinc/cp-kafka:7.4.0' # Confluent'in Kafka imajı
+    container_name: kafka
+    restart: always
+    ports:
+      - "9092:9092" # Host portu:Container portu (Uygulamalar dışarıdan localhost:9092 ile bağlanacak)
+      - "9093:9093" # Kapsayıcı içindeki dahili iletişim için
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Kafka'nın Zookeeper'a nasıl bağlanacağını söyler (servis adı + port)
+      # Dinleyicilerin konfigürasyonu:
+      # PLAINTEXT: Kapsayıcı içindeki diğer servisler (örn: order-service-app) 'kafka:9093' ile bağlanır.
+      # PLAINTEXT_HOST: Host makinesi (localhost) 'localhost:9092' ile bağlanır.
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9093,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Tek broker için replikasyon faktörü (prod'da daha yüksek olur)
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0 # Hızlı başlangıç için (dev ortamında faydalı)
+    depends_on: # Zookeeper hazır olana kadar Kafka başlamaz
+      zookeeper:
+        condition: service_healthy
+    healthcheck: # Kafka'nın sağlıklı olup olmadığını kontrol et
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Order Service Uygulaması Servisi (Mevcut)
+  order-service-app:
+    build: . # Dockerfile'ınızın projenin kök dizininde olduğundan emin olun
+    container_name: order-service-app
+    restart: always
+    ports:
+      - "8081:8081" # Host portu:Container portu. Uygulamanıza localhost:8081 üzerinden erişebilirsiniz.
+    environment: # Spring Boot uygulaması için ortam değişkenleri (application.yml'deki bazı ayarları ezer)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://order-db:5432/orderdb # Kapsayıcı içinden DB'ye erişim (servis adı)
+      SPRING_DATASOURCE_USERNAME: orderuser
+      SPRING_DATASOURCE_PASSWORD: orderpassword
+      # Kafka'ya kapsayıcı içinden bağlanma adresi
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9093 # Kapsayıcı içinden Kafka'ya erişim (servis adı + iç port)
+      # Diğer servislerin URL'leri (mock adaptörleriniz için application.yml'deki değerler geçerli olacak)
+      # Eğer Cart/Product servisleri Docker Compose içinde tanımlıysa, onların servis adları kullanılabilir.
+      # Şu an için mock olduğundan bu ENV'leri burada bırakmaya gerek yok, application.yml'den gelecekler.
+      # Ama eğer Cart/Product'ı da Docker'a taşırsanız, bu ENV'leri buraya eklemeniz gerekir.
+    depends_on: # Bu servislerin hazır olmasını bekler
+      order-db:
+        condition: service_healthy
+      kafka: # Kafka sağlıklı olana kadar Order Service başlamaz
+        condition: service_healthy
+
+# Kalıcı veri depolama için tanımlanan Docker volume'leri
+volumes:
+  order_data: # PostgreSQL verileri için
+  # Kafka ve Zookeeper için de volume'lar tanımlanabilir (isteğe bağlı, dev ortamı için zorunlu değil)
+  # zookeeper_data:
+  # kafka_data:

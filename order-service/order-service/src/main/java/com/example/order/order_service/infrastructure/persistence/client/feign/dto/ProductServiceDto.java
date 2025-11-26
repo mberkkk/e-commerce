@@ -1,19 +1,16 @@
-package com.microservices.product_service.Request;
+// ProductServiceDto.java
+package com.example.order.order_service.infrastructure.persistence.client.feign.dto;
 
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data
-public class AddProductRequest {
+public class ProductServiceDto {
+    private Long id;
     private String name;
     private String description;
     private BigDecimal price;
-    private String currency;
     private Integer stockQuantity;
-    private String imageUrl;
     private Integer popularityScore;
     private Boolean isActive;
-    private Long categoryCode;
-    private String categoryType;
 }

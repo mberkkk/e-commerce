@@ -16,6 +16,7 @@ public class ProductDTO extends BaseDTO{
     private String name;
     private String description;
     private BigDecimal price;
+    private String currency;
     private Integer stockQuantity;
     private String imageUrl;
     private Integer popularityScore;
