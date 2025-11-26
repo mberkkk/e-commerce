@@ -1,27 +1,23 @@
-FROM eclipse-temurin:17-jdk-alpine
 
+# 1. Build aşaması
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Maven wrapper ve pom.xml'i kopyala
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
+# Proje dosyalarını kopyala
+COPY . .
 
-# Maven wrapper'ı çalıştırılabilir yap
-RUN chmod +x ./mvnw
+# Maven ile jar dosyasını oluştur
+RUN mvn clean package -DskipTests
 
-# Dependency'leri indir (caching için)
-RUN ./mvnw dependency:go-offline -B
+# 2. Run aşaması
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
 
-# Source code'u kopyala
-COPY src ./src
+# Build aşamasından jar dosyasını kopyala
+COPY --from=build /app/target/*.jar app.jar
 
-COPY target/*.jar app.jar
-
-# Uygulamayı build et
-RUN ./mvnw clean package -DskipTests
-
-# Port'u expose et
+# Portu expose et
 EXPOSE 8083
 
-# JAR dosyasını çalıştır (user-service artifactId'sine göre)
-ENTRYPOINT ["java", "-jar", "target/UserMicroServiceProject-0.0.1-SNAPSHOT.jar"]
+# Uygulamayı çalıştır
+ENTRYPOINT ["java", "-jar", "app.jar"]

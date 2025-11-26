@@ -16,11 +16,7 @@ public class KafkaEventPublisherAdapter implements EventPublisherPort {
 
     @Override
     public void publishUserRegistered(UserRegisteredEvent event) {
-        NotificationUserRegisteredEvent notificationEvent = new NotificationUserRegisteredEvent();
-        notificationEvent.setUserId(event.getUserId());
-        notificationEvent.setEmail(event.getEmail());
-        notificationEvent.setUsername(event.getFirstName() + " " + event.getLastName());
-        kafkaTemplate.send("user-registered", event.getUserId(), notificationEvent);
+        kafkaTemplate.send("user-registered", event.getUserId(), event);
         log.info("Published user-registered event for user: {}", event.getUserId());
     }
 
@@ -54,33 +50,4 @@ public class KafkaEventPublisherAdapter implements EventPublisherPort {
         log.info("Published {} event for aggregate: {}", event.getEventType(), event.getAggregateId());
     }
 
-    public static class NotificationUserRegisteredEvent {
-        private String userId;
-        private String email;
-        private String username;
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-    }
 }
