@@ -1,0 +1,68 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/orderdb}
+    username: ${SPRING_DATASOURCE_USERNAME:orderuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:orderpassword}
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  # FIXED Kafka Configuration for Docker environment
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9093}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: order-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+
+# Microservice URLs
+services:
+  cart-service:
+    url: ${SERVICES_CART_SERVICE_URL:http://cart-service-app:8082} # ← localhost değil!
+  product-service:
+    url: ${SERVICES_PRODUCT_SERVICE_URL:http://product-service-app:8080} # ← localhost değil!
+  cart:
+    base-url: ${SERVICES_CART_BASE_URL:http://cart-service-app:8082} # ← localhost değil!
+    endpoints:
+      get-items: /api/carts/{cartId}/items
+  product:
+    base-url: ${SERVICES_PRODUCT_BASE_URL:http://product-service-app:8080} # ← localhost değil!
+    endpoints:
+      reserve-stock: /api/inventory/reserve
+      get-details: /api/products/details
+
+# Logging configuration
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    com.example.order: INFO
+    org.springframework.cloud.openfeign: INFO
+    org.springframework.kafka: WARN
+
+# Swagger/OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
