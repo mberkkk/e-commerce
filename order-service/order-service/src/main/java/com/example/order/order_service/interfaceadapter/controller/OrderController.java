@@ -65,10 +65,6 @@ public class OrderController {
     public ResponseEntity<Page<OrderSummaryResponse>> listCustomerOrders(
             @PathVariable String customerId,
             Pageable pageable) {
-        String authenticatedCustomerId = "customer-postman-001"; // <-- BURAYI DEĞİŞTİRİN
-        if (!customerId.equals(authenticatedCustomerId) /* && !hasAdminRole() */) {
-            throw new SecurityException("Access denied: You can only view your own orders.");
-        }
         Page<OrderSummaryResponse> response = listCustomerOrdersPort.listCustomerOrders(customerId, pageable);
         return ResponseEntity.ok(response);
     }

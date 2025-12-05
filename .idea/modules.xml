@@ -3,11 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ECommerceMicroProject.iml" filepath="$PROJECT_DIR$/.idea/ECommerceMicroProject.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Notification/Notification.iml" filepath="$PROJECT_DIR$/Notification/Notification.iml" />
-      <module fileurl="file://$PROJECT_DIR$/User_microservice/MicroservicesProject/UserMicroServiceProject/UserMicroServiceProject/UserMicroServiceProject.iml" filepath="$PROJECT_DIR$/User_microservice/MicroservicesProject/UserMicroServiceProject/UserMicroServiceProject/UserMicroServiceProject.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cart-repository-master/cart-repository-master/cart-service.iml" filepath="$PROJECT_DIR$/cart-repository-master/cart-repository-master/cart-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/order-service/order-service/order-service.iml" filepath="$PROJECT_DIR$/order-service/order-service/order-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Product-Micro-Service-main/Product-Micro-Service-main/product-service.iml" filepath="$PROJECT_DIR$/Product-Micro-Service-main/Product-Micro-Service-main/product-service.iml" />
     </modules>
   </component>
 </project>

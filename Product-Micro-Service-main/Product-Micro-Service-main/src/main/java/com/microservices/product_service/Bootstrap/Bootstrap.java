@@ -30,10 +30,6 @@ public class Bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        deleteData();
-//        setCategoryCSVData();
-//        setProductCSVData();
-//        setStockReservationCSV();
     }
     private void deleteData() {
         productRepository.deleteAll();
