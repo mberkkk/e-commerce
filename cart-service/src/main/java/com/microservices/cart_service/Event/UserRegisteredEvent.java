@@ -1,19 +1,23 @@
 package com.microservices.cart_service.Event;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRegisteredEvent {
-    private final String eventId;
-    private final String userId;
-    private final String email;
-    private final String firstName;
-    private final String lastName;
-    private final String phoneNumber;
-    private final Instant registeredAt;
-    private final String registrationSource; // WEB, MOBILE, API
-    private final Instant eventTimestamp;
+    private  String eventId;
+    private  String userId;
+    private  String email;
+    private  String firstName;
+    private  String lastName;
+    private  String phoneNumber;
+    private  Instant registeredAt;
+    private  String registrationSource; // WEB, MOBILE, API
+    private  Instant eventTimestamp;
 
 }

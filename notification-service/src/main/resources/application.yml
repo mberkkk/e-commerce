@@ -5,9 +5,9 @@ spring:
   application:
     name: notification-service
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://notification-db:5432/notification}
-    username: ${SPRING_DATASOURCE_USERNAME:notificationuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:notificationpassword}
+    url: jdbc:postgresql://notification-db:5432/notification
+    username: notificationuser
+    password: notificationpassword
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -17,52 +17,31 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        current_session_context_class: thread
+
   kafka:
-    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9093}
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.trusted.packages: "*"
     consumer:
-      group-id: notification-service
+      bootstrap-servers: kafka:9093
+      group-id: notification-service-group
       auto-offset-reset: earliest
-      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # Hata olduğunda durmasın diye ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
-        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        # --- KRİTİK AYARLAR ---
         spring.json.trusted.packages: "*"
-        spring.json.use.type.headers: false
-        spring.json.value.default.type: org.example.notification.dto.event.UserRegisteredEvent
-        spring.json.type.mapping: user-registered:org.example.notification.dto.event.UserRegisteredEvent,order-created:org.example.notification.dto.event.OrderCreatedEvent,cart-abandoned:org.example.notification.dto.event.CartAbandonedEvent,password-changed:org.example.notification.dto.event.UserRegisteredEvent,product-stock-updated:org.example.notification.dto.event.ProductStockUpdatedEvent
+        spring.json.use.type.headers: true
+        # Mapping: Gönderen Paket -> Alan (Notification) Paket
+      # ... (diğer ayarlar)
+        properties:
+          spring.json.type.mapping: >
+            com.example.UserMicroServiceProject.domain.event.UserRegisteredEvent:org.example.notification.dto.event.UserRegisteredEvent,
+            com.example.order.order_service.application.dto.OrderCreatedEvent:org.example.notification.dto.event.OrderCreatedEvent,
+            com.microservices.cart_service.Event.ItemAddedToCartEvent:org.example.notification.dto.event.ItemAddedToCartEvent
+# Mail ayarları (Loglarda görmek için dummy ayarlar)
+# Gerçek mail atmaması için serviste loglama yapması yeterli
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:your-email@gmail.com}
-    password: ${MAIL_PASSWORD:your-app-password}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          ssl:
-            trust: smtp.gmail.com
-
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operationsSorter: method
-    enabled: true
-    disable-swagger-default-url: true
-
-logging:
-  level:
-    org.example.notification: DEBUG
-    org.springframework: INFO
-    org.springframework.kafka: DEBUG
-    org.springframework.mail: DEBUG
+    username: test@gmail.com
+    password: testpassword

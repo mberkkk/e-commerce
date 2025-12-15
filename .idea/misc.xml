@@ -9,6 +9,11 @@
         <option value="$PROJECT_DIR$/cart-repository-master/cart-repository-master/pom.xml" />
         <option value="$PROJECT_DIR$/Product-Micro-Service-main/Product-Micro-Service-main/pom.xml" />
         <option value="$PROJECT_DIR$/order-service/order-service/pom.xml" />
+        <option value="$PROJECT_DIR$/cart-service/pom.xml" />
+        <option value="$PROJECT_DIR$/user-service/pom.xml" />
+        <option value="$PROJECT_DIR$/product-service/pom.xml" />
+        <option value="$PROJECT_DIR$/order-service/pom.xml" />
+        <option value="$PROJECT_DIR$/notification-service/pom.xml" />
       </list>
     </option>
   </component>

@@ -35,12 +35,21 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
+      bootstrap-servers: kafka:9093
       group-id: user-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      # Hata olduğunda loop'a girmemesi için ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
-        spring.json.trusted.packages: com.example.UserMicroServiceProject.domain.model.user
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+        # --- AŞI BURADA ---
+        # 1. Tüm paketlere güven
+        spring.json.trusted.packages: "*"
+        # 2. Header bilgisini (Paket ismini) GÖRMEZDEN GEL.
+        # Böylece "OrderCreatedEvent" JSON verisini alıp User Service'deki karşılığına zorla oturtur.
+        spring.json.use.type.headers: false
 
   cloud:
     openfeign:
