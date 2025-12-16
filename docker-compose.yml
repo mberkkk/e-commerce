@@ -205,6 +205,19 @@ services:
     depends_on:
       - kafka
       - notification-db
+  gateway-service-app:
+    build: ./gateway-service
+    container_name: gateway-service-app
+    ports:
+      - "9090:9090"
+    depends_on:
+      - product-service-app
+      - user-service-app
+      - cart-service-app
+      - order-service-app
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+
 
 volumes:
   order_data:

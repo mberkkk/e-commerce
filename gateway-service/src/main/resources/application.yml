@@ -1,0 +1,50 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: product-service
+          uri: http://product-service-app:8080
+          predicates:
+            - Path=/api/products/**
+        - id: user-service
+          uri: http://user-service-app:8083
+          predicates:
+            - Path=/api/users/**
+        - id: cart-service
+          uri: http://cart-service-app:8082
+          predicates:
+            - Path=/api/cart/**
+        - id: order-service
+          uri: http://order-service-app:8081
+          predicates:
+            - Path=/api/orders/**
+        - id: notification-service
+          uri: http://notification-service-app:8084
+          predicates:
+            - Path=/api/notifications/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
