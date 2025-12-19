@@ -15,31 +15,31 @@ import org.springframework.stereotype.Component;
 public class CategoryMapperImpl implements CategoryMapper {
 
     @Override
-    public CategoryDTO toEntity(Category category) {
+    public CategoryDTO toDTO(Category category) {
         if ( category == null ) {
             return null;
         }
 
-        CategoryDTO.CategoryDTOBuilder categoryDTO = CategoryDTO.builder();
+        CategoryDTO.CategoryDTOBuilder<?, ?> categoryDTO = CategoryDTO.builder();
 
+        categoryDTO.createdAt( category.getCreatedAt() );
+        categoryDTO.updatedAt( category.getUpdatedAt() );
         categoryDTO.id( category.getId() );
-        categoryDTO.categoryCode( category.getCategoryCode() );
-        categoryDTO.categoryType( category.getCategoryType() );
+        categoryDTO.name( category.getName() );
 
         return categoryDTO.build();
     }
 
     @Override
-    public Category toDTO(CategoryDTO categoryDTO) {
+    public Category toEntity(CategoryDTO categoryDTO) {
         if ( categoryDTO == null ) {
             return null;
         }
 
-        Category.CategoryBuilder category = Category.builder();
+        Category.CategoryBuilder<?, ?> category = Category.builder();
 
         category.id( categoryDTO.getId() );
-        category.categoryCode( categoryDTO.getCategoryCode() );
-        category.categoryType( categoryDTO.getCategoryType() );
+        category.name( categoryDTO.getName() );
 
         return category.build();
     }
@@ -52,7 +52,7 @@ public class CategoryMapperImpl implements CategoryMapper {
 
         List<CategoryDTO> list = new ArrayList<CategoryDTO>( categories.size() );
         for ( Category category : categories ) {
-            list.add( toEntity( category ) );
+            list.add( toDTO( category ) );
         }
 
         return list;
@@ -66,7 +66,7 @@ public class CategoryMapperImpl implements CategoryMapper {
 
         List<Category> list = new ArrayList<Category>( categoryDTOS.size() );
         for ( CategoryDTO categoryDTO : categoryDTOS ) {
-            list.add( toDTO( categoryDTO ) );
+            list.add( toEntity( categoryDTO ) );
         }
 
         return list;

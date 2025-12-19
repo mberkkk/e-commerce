@@ -1,7 +1,6 @@
 package com.microservices.product_service.Controller;
 
 import com.microservices.product_service.Request.AddProductRequest;
-import com.microservices.product_service.Request.CategoryQueryRequest;
 import com.microservices.product_service.Response.ProductListResponse;
 import com.microservices.product_service.Response.ProductResponse;
 import org.springframework.web.bind.annotation.*;

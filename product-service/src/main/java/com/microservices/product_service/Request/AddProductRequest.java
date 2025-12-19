@@ -16,6 +16,5 @@ public class AddProductRequest {
     private String imageUrl;
     private Integer popularityScore;
     private Boolean isActive;
-    private Long categoryCode;
-    private String categoryType;
+    private Long categoryId;
 }

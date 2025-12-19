@@ -1,15 +1,12 @@
 package com.microservices.product_service.Service;
 
 import com.microservices.product_service.Entity.Category;
-import com.microservices.product_service.Entity.CategoryType;
 import com.microservices.product_service.Entity.Product;
 import com.microservices.product_service.Mappers.ProductMapper;
 import com.microservices.product_service.Repository.ProductRepository;
 import com.microservices.product_service.Request.AddProductRequest;
-import com.microservices.product_service.Request.CategoryQueryRequest;
 import com.microservices.product_service.Response.ProductListResponse;
 import com.microservices.product_service.Response.ProductResponse;
-import com.microservices.product_service.Specs.ProductSpecifications;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,49 +43,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse addProduct(AddProductRequest request) {
-        ProductResponse response = new ProductResponse();
-        Product product = new Product();
-        if (request.getName() != null) {
-            product.setName(request.getName());
-        }
-        if (request.getStockQuantity() != null) {
-            product.setStockQuantity(request.getStockQuantity());
-        }
-        if (request.getDescription() != null) {
-            product.setDescription(request.getDescription());
-        }
-        if (request.getPrice() != null) {
-            product.setPrice(request.getPrice());
-        }
-        if (request.getPopularityScore() != null) {
-            product.setPopularityScore(request.getPopularityScore());
-        } else {
-            product.setPopularityScore(0); // Default value
-        }
-        if (request.getIsActive() != null) {
-            product.setIsActive(request.getIsActive());
-        } else {
-            product.setIsActive(true); // Default active
-        }
-        if (request.getCategoryCode() != null) {
-            Optional<Category> category = categoryService.getCategoryByCode(request.getCategoryCode());
-            if (category.isPresent())
-                product.setCategory(category.get());
-        } else if (request.getCategoryType() != null) {
-            CategoryType categoryTypeEnum;
-            try {
-                categoryTypeEnum = CategoryType.valueOf(request.getCategoryType().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Geçersiz categoryType");
-            }
-            Optional<Category> category = categoryService.getCategoryByType(categoryTypeEnum);
-            if (category.isPresent())
-                product.setCategory(category.get());
+        Product product = mapper.requestToEntity(request);
+
+        if (request.getCategoryId() != null) {
+            Category category = categoryService.getCategoryByReference(request.getCategoryId());
+            product.setCategory(category);
         }
         Product updatedProduct = repository.save(product);
+
+        ProductResponse response = new ProductResponse();
         response.setProductDTO(mapper.toDTO(updatedProduct));
         return response;
     }
+
 
     @Override
     @Transactional
@@ -110,21 +77,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductListResponse searchProducts(String categoryType, Long categoryCode) {
+    public ProductListResponse searchProducts(Long categoryId) {
         ProductListResponse response = new ProductListResponse();
-        if (categoryCode != null) {
-            response.setProductDTOS(
-                    mapper.toDTOList(repository.findAll(ProductSpecifications.hasCategoryCode(categoryCode))));
-        } else if (categoryType != null) {
-            CategoryType categoryTypeEnum;
-            try {
-                categoryTypeEnum = CategoryType.valueOf(categoryType.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Geçersiz categoryType: " + categoryType);
-            }
-            response.setProductDTOS(
-                    mapper.toDTOList(repository.findAll(ProductSpecifications.hasCategoryType(categoryTypeEnum))));
+
+        // EĞER ID VARSA DİREKT ID İLE ÇEK (En hızlısı)
+        if (categoryId != null) {
+            List<Product> products = repository.findAllByCategoryId(categoryId);
+            response.setProductDTOS(mapper.toDTOList(products));
         }
+
         return response;
     }
 

@@ -22,7 +22,7 @@ public interface ProductService {
 
     Optional<Product> findById(Long id);
 
-    ProductListResponse searchProducts(String categoryType, Long categoryCode);
+    ProductListResponse searchProducts(Long categoryCode);
 
     // ✅ YENİ METODLAR - microservice communication için
     void updatePopularityScore(Long productId, Integer quantity);

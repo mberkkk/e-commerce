@@ -4,6 +4,7 @@ import com.microservices.product_service.DTO.CategoryDTO;
 import com.microservices.product_service.DTO.ProductDTO;
 import com.microservices.product_service.Entity.Category;
 import com.microservices.product_service.Entity.Product;
+import com.microservices.product_service.Request.AddProductRequest;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -22,12 +23,15 @@ public class ProductMapperImpl implements ProductMapper {
             return null;
         }
 
-        Product.ProductBuilder product = Product.builder();
+        Product.ProductBuilder<?, ?> product = Product.builder();
 
+        product.createdAt( productDTO.getCreatedAt() );
+        product.updatedAt( productDTO.getUpdatedAt() );
         product.id( productDTO.getId() );
         product.name( productDTO.getName() );
         product.description( productDTO.getDescription() );
         product.price( productDTO.getPrice() );
+        product.currency( productDTO.getCurrency() );
         product.stockQuantity( productDTO.getStockQuantity() );
         product.imageUrl( productDTO.getImageUrl() );
         product.popularityScore( productDTO.getPopularityScore() );
@@ -43,17 +47,20 @@ public class ProductMapperImpl implements ProductMapper {
             return null;
         }
 
-        ProductDTO.ProductDTOBuilder productDTO = ProductDTO.builder();
+        ProductDTO.ProductDTOBuilder<?, ?> productDTO = ProductDTO.builder();
 
         productDTO.id( product.getId() );
         productDTO.name( product.getName() );
         productDTO.description( product.getDescription() );
         productDTO.price( product.getPrice() );
+        productDTO.currency( product.getCurrency() );
         productDTO.stockQuantity( product.getStockQuantity() );
         productDTO.imageUrl( product.getImageUrl() );
         productDTO.popularityScore( product.getPopularityScore() );
         productDTO.category( categoryToCategoryDTO( product.getCategory() ) );
         productDTO.isActive( product.getIsActive() );
+        productDTO.createdAt( product.getCreatedAt() );
+        productDTO.updatedAt( product.getUpdatedAt() );
 
         return productDTO.build();
     }
@@ -86,16 +93,50 @@ public class ProductMapperImpl implements ProductMapper {
         return list;
     }
 
+    @Override
+    public Product requestToEntity(AddProductRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Product.ProductBuilder<?, ?> product = Product.builder();
+
+        if ( request.getCurrency() != null ) {
+            product.currency( request.getCurrency() );
+        }
+        else {
+            product.currency( "TL" );
+        }
+        if ( request.getPopularityScore() != null ) {
+            product.popularityScore( request.getPopularityScore() );
+        }
+        else {
+            product.popularityScore( 0 );
+        }
+        if ( request.getIsActive() != null ) {
+            product.isActive( request.getIsActive() );
+        }
+        else {
+            product.isActive( true );
+        }
+        product.name( request.getName() );
+        product.description( request.getDescription() );
+        product.price( request.getPrice() );
+        product.stockQuantity( request.getStockQuantity() );
+        product.imageUrl( request.getImageUrl() );
+
+        return product.build();
+    }
+
     protected Category categoryDTOToCategory(CategoryDTO categoryDTO) {
         if ( categoryDTO == null ) {
             return null;
         }
 
-        Category.CategoryBuilder category = Category.builder();
+        Category.CategoryBuilder<?, ?> category = Category.builder();
 
         category.id( categoryDTO.getId() );
-        category.categoryCode( categoryDTO.getCategoryCode() );
-        category.categoryType( categoryDTO.getCategoryType() );
+        category.name( categoryDTO.getName() );
 
         return category.build();
     }
@@ -105,11 +146,12 @@ public class ProductMapperImpl implements ProductMapper {
             return null;
         }
 
-        CategoryDTO.CategoryDTOBuilder categoryDTO = CategoryDTO.builder();
+        CategoryDTO.CategoryDTOBuilder<?, ?> categoryDTO = CategoryDTO.builder();
 
+        categoryDTO.createdAt( category.getCreatedAt() );
+        categoryDTO.updatedAt( category.getUpdatedAt() );
         categoryDTO.id( category.getId() );
-        categoryDTO.categoryCode( category.getCategoryCode() );
-        categoryDTO.categoryType( category.getCategoryType() );
+        categoryDTO.name( category.getName() );
 
         return categoryDTO.build();
     }

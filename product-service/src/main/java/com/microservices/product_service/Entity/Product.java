@@ -5,10 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode; // Eklendi
 import lombok.experimental.FieldNameConstants;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PRODUCTS")
@@ -16,7 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldNameConstants
-@Builder
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +26,14 @@ public class Product extends BaseEntity {
     private String name;
     private String description;
     private BigDecimal price;
+    private String currency;
     private Integer stockQuantity;
     private String imageUrl;
     private Integer popularityScore;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
-    private Boolean isActive;
 
+    private Boolean isActive;
 }

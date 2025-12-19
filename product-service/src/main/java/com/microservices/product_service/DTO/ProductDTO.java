@@ -3,6 +3,7 @@ package com.microservices.product_service.DTO;
 import com.microservices.product_service.Entity.Category;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class ProductDTO extends BaseDTO{
     private Long id;
     private String name;
@@ -20,7 +22,6 @@ public class ProductDTO extends BaseDTO{
     private Integer stockQuantity;
     private String imageUrl;
     private Integer popularityScore;
-    //buraya dikkat
     private CategoryDTO category;
     private Boolean isActive;
     private LocalDateTime createdAt;

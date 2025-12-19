@@ -1,17 +1,15 @@
 package com.microservices.product_service.Service;
 
+import com.microservices.product_service.DTO.CategoryDTO;
 import com.microservices.product_service.Entity.Category;
 import com.microservices.product_service.Entity.CategoryType;
 import com.microservices.product_service.Mappers.CategoryMapper;
 import com.microservices.product_service.Repository.CategoryRepository;
-import com.microservices.product_service.Request.CategoryQueryRequest;
+import com.microservices.product_service.Request.AddCategoryRequest;
 import com.microservices.product_service.Response.GetCategoriesResponse;
-import com.microservices.product_service.Response.ProductListResponse;
-import com.microservices.product_service.Specs.ProductSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +18,29 @@ public class CategoryServiceImpl implements CategoryService{
     private final CategoryMapper mapper;
 
     @Override
-    public GetCategoriesResponse getCategories() {
+    public GetCategoriesResponse getAllCategories() {
         GetCategoriesResponse response = new GetCategoriesResponse();
         response.setCategoryDTOS(mapper.toDTOList(repository.findAll()));
         return response;
     }
 
     @Override
-    public Optional<Category> getCategoryByCode(Long categoryCode) {
-        return repository.findByCategoryCode(categoryCode);
+    public Category getCategoryByReference(Long categoryId) {
+        return repository.getReferenceById(categoryId);
     }
 
     @Override
-    public Optional<Category> getCategoryByType(CategoryType categoryType) {
-        return repository.findByCategoryType(categoryType);
+    public void deleteCategory(Long categoryId) {
+        repository.deleteById(categoryId);
     }
 
+    @Override
+    public CategoryDTO addCategory(AddCategoryRequest request) {
+        Category category = Category.builder()
+                .type(CategoryType.valueOf(request.getType().toUpperCase()))
+                .build();
 
+        Category savedCategory = repository.save(category);
+        return mapper.toDTO(savedCategory);
+    }
 }

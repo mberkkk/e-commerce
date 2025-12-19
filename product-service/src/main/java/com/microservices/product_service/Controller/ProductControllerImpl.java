@@ -1,7 +1,6 @@
 package com.microservices.product_service.Controller;
 
 import com.microservices.product_service.Request.AddProductRequest;
-import com.microservices.product_service.Request.CategoryQueryRequest;
 import com.microservices.product_service.Response.ProductListResponse;
 import com.microservices.product_service.Response.ProductResponse;
 import com.microservices.product_service.Service.ProductService;
@@ -41,7 +40,7 @@ public class ProductControllerImpl implements ProductController{
     @Override
     @PostMapping("/search")
     public ProductListResponse searchProducts(@RequestParam(required = false) String categoryType, @RequestParam(required = false) Long categoryCode) {
-        return productService.searchProducts(categoryType,categoryCode);
+        return productService.searchProducts(categoryCode);
     }
 
 }

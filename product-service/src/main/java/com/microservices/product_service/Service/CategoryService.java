@@ -1,17 +1,19 @@
 package com.microservices.product_service.Service;
 
+import com.microservices.product_service.DTO.CategoryDTO;
 import com.microservices.product_service.Entity.Category;
 import com.microservices.product_service.Entity.CategoryType;
-import com.microservices.product_service.Request.CategoryQueryRequest;
+import com.microservices.product_service.Request.AddCategoryRequest;
 import com.microservices.product_service.Response.GetCategoriesResponse;
-import com.microservices.product_service.Response.ProductListResponse;
 
 import java.util.Optional;
 
 public interface CategoryService {
-    GetCategoriesResponse getCategories();
+    GetCategoriesResponse getAllCategories();
 
-    Optional<Category> getCategoryByCode(Long categoryCode);
+    CategoryDTO addCategory(AddCategoryRequest addCategoryRequest);
 
-    Optional<Category> getCategoryByType(CategoryType categoryType);
+    void deleteCategory(Long categoryId);
+
+    Category getCategoryByReference(Long categoryId);
 }
