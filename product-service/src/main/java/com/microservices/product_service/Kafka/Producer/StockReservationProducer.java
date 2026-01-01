@@ -1,7 +1,6 @@
-package com.microservices.product_service.Service;
+package com.microservices.product_service.Kafka.Producer;
 
 import com.microservices.product_service.Response.EventResponse;
-import com.microservices.product_service.Response.ReserveStockResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ReservationProducer {
+public class StockReservationProducer {
     private final NewTopic topic;
     private final KafkaTemplate<String, EventResponse> kafkaTemplate;
 

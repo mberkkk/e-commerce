@@ -1,10 +1,12 @@
 package com.microservices.product_service.Controller;
 
-import com.microservices.product_service.Request.AddProductRequest;
+import com.microservices.product_service.DTO.ProductDTO;
+import com.microservices.product_service.Request.CreateProductRequest;
 import com.microservices.product_service.Response.ProductListResponse;
 import com.microservices.product_service.Response.ProductResponse;
 import com.microservices.product_service.Service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/products")
@@ -13,34 +15,31 @@ import org.springframework.web.bind.annotation.*;
 public class ProductControllerImpl implements ProductController{
     private final ProductService productService;
 
-    @Override
     @GetMapping
-    public ProductListResponse getProducts() {
-        return productService.getProducts();
-    }
-
     @Override
+    public ResponseEntity<ProductListResponse> getAllProducts() {
+        ProductListResponse response = productService.getAllProducts();
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/{id}")
-    public ProductResponse getProduct(@PathVariable("id") Long id) {
-        return productService.getProduct(id);
-    }
-
     @Override
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        ProductDTO productDTO = productService.getProductById(id);
+        return ResponseEntity.ok(productDTO);
+    }
     @PostMapping
-    public ProductResponse addProduct(@RequestBody AddProductRequest request) {
-        return productService.addProduct(request);
+    @Override
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody CreateProductRequest request) {
+        ProductDTO createdProduct = productService.createProduct(request);
+        return ResponseEntity.ok(createdProduct);
     }
 
+    @GetMapping("/category/{categoryId}")
     @Override
-    @PutMapping("/{id}/stock")
-    public ProductResponse updateStock(@PathVariable("id") Long id, @RequestBody AddProductRequest request) {
-        return productService.updateStock(id,request);
-    }
-
-    @Override
-    @PostMapping("/search")
-    public ProductListResponse searchProducts(@RequestParam(required = false) String categoryType, @RequestParam(required = false) Long categoryCode) {
-        return productService.searchProducts(categoryCode);
-    }
+    public ResponseEntity<java.util.List<ProductDTO>> getProductsByCategoryId(@PathVariable Long
+    categoryId) {
+            java.util.List<ProductDTO> products = productService.getProductsByCategoryId(categoryId);
+            return ResponseEntity.ok(products);
+        }
 
 }

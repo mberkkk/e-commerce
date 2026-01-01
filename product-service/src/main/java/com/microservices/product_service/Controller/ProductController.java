@@ -1,19 +1,26 @@
 package com.microservices.product_service.Controller;
 
-import com.microservices.product_service.Request.AddProductRequest;
+import com.microservices.product_service.DTO.ProductDTO;
+import com.microservices.product_service.Request.CreateProductRequest;
 import com.microservices.product_service.Response.ProductListResponse;
 import com.microservices.product_service.Response.ProductResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@RequestMapping("/api/products")
 public interface ProductController {
 
-    ProductListResponse getProducts();
+    @GetMapping
+    ResponseEntity<ProductListResponse> getAllProducts();
 
-    ProductResponse getProduct(@PathVariable("id") Long id);
+    @GetMapping("/{id}")
+    ResponseEntity<ProductDTO> getProductById(@PathVariable Long id);
 
-    ProductResponse addProduct(@RequestBody AddProductRequest request);
+    @PostMapping
+    ResponseEntity<ProductDTO> createProduct(@RequestBody CreateProductRequest request);
 
-    ProductResponse updateStock(@PathVariable("id") Long id, @RequestBody AddProductRequest request);
-
-    ProductListResponse searchProducts(@RequestParam(required = false) String categoryType, @RequestParam(required = false) Long categoryCode);
+    @GetMapping("/category/{categoryId}")
+    ResponseEntity<List<ProductDTO>> getProductsByCategoryId(@PathVariable Long categoryId);
 }

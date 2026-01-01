@@ -6,15 +6,11 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class AddProductRequest {
+public class CreateProductRequest {
     private String name;
     private String description;
-    private BigDecimal price;
-    @Schema(description = "currency")
-    private String currency;
+    private Double price;
     private Integer stockQuantity;
     private String imageUrl;
-    private Integer popularityScore;
-    private Boolean isActive;
-    private Long categoryId;
+    private Long categoryId; // Sadece ID yeterli
 }

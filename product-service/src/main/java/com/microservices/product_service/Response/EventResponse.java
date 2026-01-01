@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventResponse {
+    private String id;
     private String status;
     private String message;
     private ReserveStockResponse payload;
